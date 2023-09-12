@@ -24,6 +24,9 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
 
+         <sonar.organization>sakanokoh</sonar.organization>
+         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+             
         <sonar.language>java</sonar.language>
         <sonar.projectKey>sn.ept.git.seminaire.cicd.todos</sonar.projectKey>
         <sonar.projectName>TODOS</sonar.projectName>
