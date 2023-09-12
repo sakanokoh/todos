@@ -16,7 +16,7 @@ import java.util.Date;
 @EqualsAndHashCode
 @ToString
 @SuperBuilder
-public class ErrorMessage {
+public  class ErrorMessage {
     private int status;
     private Date timestamp;
     private String message;

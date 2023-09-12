@@ -52,6 +52,12 @@
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>${jacoco.version}</version>
         </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier</artifactId>
+            <version>3.15.1</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- archi test-->
         <dependency>

@@ -7,6 +7,7 @@ import sn.ept.git.seminaire.cicd.utils.UrlMapping;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,6 +29,14 @@ class DefaultResourceTest extends BasicResourceTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is(DefaultResource.HEALTH_MSG)));
     }
+
+    @Test
+    void nonExistentEndpointShouldReturnNotFound() throws Exception {
+    mockMvc.perform(get("/non-existent-endpoint")
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+}   
+
 
 
 }

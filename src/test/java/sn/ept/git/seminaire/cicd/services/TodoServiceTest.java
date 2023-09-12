@@ -30,6 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         @Sql("classpath:0_todo_data_test.sql"),
         @Sql("classpath:1_todo_data_test.sql"),
 })*/
+
+
+
+
 @Slf4j
 class TodoServiceTest extends ServiceBaseTest {
 
@@ -168,6 +172,31 @@ class TodoServiceTest extends ServiceBaseTest {
         );
     }
 
+
+    @Test
+void complete_shouldCompleteTodo() {
+    // Créez un TodoVM et enregistrez-le dans la base de données
+    TodoDTO todoDTO = service.save(vm);
+
+    // Appelez la méthode complete avec l'ID du Todo enregistré
+    TodoDTO completedTodoDTO = service.complete(todoDTO.getId());
+
+    // Vérifiez que le Todo a été complété avec succès
+    assertThat(completedTodoDTO)
+            .isNotNull()
+            .hasFieldOrPropertyWithValue("completed", true);
+}
+
+@Test
+void complete_withNonExistingTodoId_shouldThrowException() {
+    // Appelez la méthode complete avec un ID de Todo qui n'existe pas
+    UUID nonExistingId = UUID.randomUUID();
+    
+    assertThrows(
+            ItemNotFoundException.class,
+            () -> service.complete(nonExistingId)
+    );
+}
 
     //java 8 requis,
 

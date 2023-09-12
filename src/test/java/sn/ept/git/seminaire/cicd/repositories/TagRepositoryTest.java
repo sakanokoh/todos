@@ -85,5 +85,36 @@ class TagRepositoryTest extends RepositoryBaseTest {
                 .isNotPresent();
     }
 
+    
+
+    @Test
+    void findByNameWithIdNotEqual_1_shouldReturnResult() {
+        Tag otherTag = new Tag();
+        otherTag.setName("DifferentName");
+        otherTag = repository.saveAndFlush(otherTag);
+
+        optionalTag = repository.findByNameWithIdNotEquals(otherTag.getName(), entity.getId());
+        assertThat(optionalTag)
+                .isNotNull()
+                .isPresent()
+                .get()
+                .usingRecursiveComparison()
+                .isEqualTo(otherTag);
+    }
+
+    @Test
+    void updateTag_shouldUpdateEntity() {
+        String updatedName = "UpdatedName";
+        entity.setName(updatedName);
+        optionalTag = repository.findByName(entity.getName());
+
+        assertThat(optionalTag)
+                .isNotNull()
+                .isPresent()
+                .get()
+                .usingRecursiveComparison()
+                .isEqualTo(entity);
+    }
+
 
 }

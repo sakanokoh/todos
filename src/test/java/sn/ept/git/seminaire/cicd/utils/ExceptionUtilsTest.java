@@ -1,6 +1,8 @@
 package sn.ept.git.seminaire.cicd.utils;
 
 import org.junit.jupiter.api.Test;
+
+import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
 import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 
 import java.util.Optional;
@@ -34,15 +36,15 @@ class ExceptionUtilsTest {
     @Test
     void absentOrThrowShouldThrow() {
         assertThrows(
-                ItemNotFoundException.class,
-                () -> ExceptionUtils.presentOrThrow(absent,template,param)
+                ItemExistsException.class,
+                () -> ExceptionUtils.absentOrThrow(present,template,param)
         );
     }
 
     @Test
     void absentOrThrowShouldNotThrow() {
         assertDoesNotThrow(
-                () -> ExceptionUtils.presentOrThrow(present,template,param)
+                () -> ExceptionUtils.absentOrThrow(absent,template,param)
         );
     }
 

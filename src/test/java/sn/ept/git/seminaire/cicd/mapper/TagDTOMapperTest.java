@@ -8,6 +8,7 @@ import sn.ept.git.seminaire.cicd.dto.TagDTO;
 import sn.ept.git.seminaire.cicd.mappers.TagMapper;
 import sn.ept.git.seminaire.cicd.models.Tag;
 
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TagDTOMapperTest {
@@ -46,4 +47,6 @@ class TagDTOMapperTest {
                 .isEqualTo(entity);
 
     }
+
+    
 }

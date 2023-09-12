@@ -7,12 +7,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
-@ToString
+
 @Data
 @SuperBuilder
 @NoArgsConstructor
@@ -32,7 +33,9 @@ public abstract class BaseEntity implements Serializable {
     )
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
-
+    public BaseEntity(UUID id) {//ajouté
+        this.id = id;//ajouté
+    }
 
     @Builder.Default
     @CreatedDate

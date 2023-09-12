@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author ISENE
- */
+*/
 public final class Utils {
 
     private Utils() {

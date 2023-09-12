@@ -55,7 +55,7 @@ public class Todo extends BaseEntity implements Serializable {
                 .id(this.getId())
                 .title(todo.getTitle())
                 .description(todo.getDescription())
-                .completed(isCompleted())
+                .completed(todo.isCompleted())
                 .build();
 
     }

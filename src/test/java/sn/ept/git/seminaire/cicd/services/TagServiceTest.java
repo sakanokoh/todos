@@ -15,6 +15,7 @@ import sn.ept.git.seminaire.cicd.exceptions.ItemExistsException;
 import sn.ept.git.seminaire.cicd.exceptions.ItemNotFoundException;
 import sn.ept.git.seminaire.cicd.repositories.TagRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -178,9 +179,73 @@ class TagServiceTest extends ServiceBaseTest {
                 .contains(dto);
     }
 
-    //java 8 requis,
+   
 
-    //vos tests ici
+@Test
+void addAllTags_shouldAddEntities() {
+    List<TagVM> tagVMs = new ArrayList<>();
+
+TagVM tag1 = new TagVM();
+tag1.setName("Tag 1");
+tag1.setDescription("Description for Tag 1");
+tagVMs.add(tag1);
+
+TagVM tag2 = new TagVM();
+tag2.setName("Tag 2");
+tag2.setDescription("Description for Tag 2");
+tagVMs.add(tag2);
+
+// Ajoutez autant de tags que nécessaire...
+
+List<TagDTO> addedTags = service.addALL(tagVMs);
+
+    assertThat(addedTags).hasSize(tagVMs.size());
+}
+
+@Test
+void deleteAll_shouldDeleteAllTags() {
+    // Ajoutez quelques tags pour vous assurer qu'il y en a au moins un à supprimer
+    TagVM tag1 = new TagVM();
+    tag1.setName("TagToDelete1");
+    tag1.setDescription("Description for TagToDelete1");
+    service.save(tag1);
+
+    TagVM tag2 = new TagVM();
+    tag2.setName("TagToDelete2");
+    tag2.setDescription("Description for TagToDelete2");
+    service.save(tag2);
+    long oldCount = repository.count();
+    
+    // Supprimez tous les tags
+    service.deleteAll();
+
+    long newCount = repository.count();
+    // Enregistrez le nombre total de tags après la suppression
+    
+
+    // Vérifiez que le nombre total de tags a diminué
+    assertThat(oldCount).isGreaterThan(newCount);
+    assertThat(newCount).isEqualTo(0);
+}
+
+
+@Test
+void addAllTags_withDuplicateName_shouldThrowException() {
+    // Créez un tag déjà existant
+    TagVM existingTag = new TagVM();
+    existingTag.setName("ExistingTag");
+    existingTag.setDescription("Description for ExistingTag");
+    service.save(existingTag);
+
+    // Créez un nouveau tag avec le même nom
+    TagVM duplicateTag = new TagVM();
+    duplicateTag.setName("ExistingTag");
+    duplicateTag.setDescription("Description for DuplicateTag");
+
+    // Vérifiez qu'une exception ItemExistsException est levée lors de l'ajout
+    assertThrows(ItemExistsException.class, () -> service.save(duplicateTag));
+}
+
 
 
 }

@@ -17,6 +17,8 @@ import sn.ept.git.seminaire.cicd.utils.SizeMapping;
 import sn.ept.git.seminaire.cicd.utils.TestUtil;
 import sn.ept.git.seminaire.cicd.utils.UrlMapping;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -24,6 +26,9 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
+
 
 @Slf4j
 class TagResourceTest extends BasicResourceTest {
@@ -193,8 +198,106 @@ class TagResourceTest extends BasicResourceTest {
         ).andExpect(status().isNotFound());
     }
 
+    @Test
+    void add_withDescriptionMaxLengthExceeded_shouldReturnBadRequest() throws Exception {
+    vm.setDescription(RandomStringUtils.random(SizeMapping.Description.MAX + 1));
+    mockMvc.perform(post(UrlMapping.Tag.ADD)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(vm)))
+            .andExpect(status().isBadRequest());
+}
 
-    //java 8 requis,
+@Test
+void update_withDescriptionMaxLengthExceeded_shouldReturnBadRequest() throws Exception {
+    dto = service.save(vm);
+    vm.setDescription(RandomStringUtils.random(SizeMapping.Description.MAX + 1));
+    mockMvc.perform(put(UrlMapping.Tag.UPDATE, dto.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(vm)))
+            .andExpect(status().isBadRequest());
+}
 
-    //vos tests ici
+@Test
+void update_withNonExistingTagId_shouldReturnNotFound() throws Exception {
+    mockMvc.perform(put(UrlMapping.Tag.UPDATE, UUID.randomUUID())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(vm)))
+            .andExpect(status().isNotFound());
+}
+
+@Test
+void add_withNameMinLengthExceeded_shouldReturnBadRequest() throws Exception {
+    vm.setName(RandomStringUtils.random(SizeMapping.Name.MIN - 1));
+    
+    mockMvc.perform(post(UrlMapping.Tag.ADD)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(vm)))
+            .andExpect(status().isBadRequest());
+}
+
+@Test
+void add_withNameMaxLengthExceeded_shouldReturnBadRequest() throws Exception {
+    vm.setName(RandomStringUtils.random(SizeMapping.Name.MAX + 1));
+    
+    mockMvc.perform(post(UrlMapping.Tag.ADD)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(vm)))
+            .andExpect(status().isBadRequest());
+}
+
+@Test
+void update_withNameMinLengthExceeded_shouldReturnBadRequest() throws Exception {
+    dto = service.save(vm);
+    vm.setName(RandomStringUtils.random(SizeMapping.Name.MIN - 1));
+    
+    mockMvc.perform(put(UrlMapping.Tag.UPDATE, dto.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(vm)))
+            .andExpect(status().isBadRequest());
+}
+
+@Test
+void update_withNameMaxLengthExceeded_shouldReturnBadRequest() throws Exception {
+    dto = service.save(vm);
+    vm.setName(RandomStringUtils.random(SizeMapping.Name.MAX + 1));
+    
+    mockMvc.perform(put(UrlMapping.Tag.UPDATE, dto.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(vm)))
+            .andExpect(status().isBadRequest());
+}
+
+@Test
+void addAll_shouldCreateTags() throws Exception {
+    // Préparez des TagVM valides dans une liste
+    List<TagVM> validTagVMs = new ArrayList<>();
+    TagVM tagVM1 = new TagVM();
+    tagVM1.setName("Tag1"); // Remplacez "Tag1" par un nom valide
+    tagVM1.setDescription("Description du Tag1"); // Remplacez par une description valide
+    validTagVMs.add(tagVM1);
+
+    TagVM tagVM2 = new TagVM();
+    tagVM2.setName("Tag2"); // Remplacez "Tag2" par un nom valide
+    tagVM2.setDescription("Description du Tag2"); // Remplacez par une description valide
+    validTagVMs.add(tagVM2);
+
+    mockMvc.perform(
+            post(UrlMapping.Tag.ADD_ALL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(validTagVMs))
+        )
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.length()").value(validTagVMs.size())) // Assurez-vous que le nombre de tags créés correspond à la taille de la liste d'entrée
+        .andExpect(jsonPath("$.[0].id").exists()) // Vérifiez que les tags créés ont un ID
+        // Ajoutez d'autres assertions pour vérifier que les données des tags créés correspondent aux TagVM d'origine
+        // Assurez-vous également que les en-têtes de réponse appropriés sont renvoyés, le cas échéant
+    ;
+}
+
+
+
+
+
+ 
+
 }

@@ -37,9 +37,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 
+    
+
     @ExceptionHandler(value= { ItemExistsException.class })
     @ResponseStatus(value = HttpStatus.CONFLICT)
-    protected ResponseEntity<ErrorMessage> conflict(
+protected ResponseEntity<ErrorMessage> conflict( //changed from protected to public
             ItemExistsException ex, WebRequest request) {
         ErrorMessage message =  ErrorMessage.of(
                 HttpStatus.CONFLICT.value(),
@@ -49,6 +51,8 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         );
         return new ResponseEntity<>(message, HttpStatus.CONFLICT);
     }
+
+    
 
     @ExceptionHandler(value= { InvalidException.class })
     @ResponseStatus(value = HttpStatus.CONFLICT)
@@ -102,5 +106,5 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return new ResponseEntity<>(message,   ex.getStatus());
     }
 
-
+    
 }
