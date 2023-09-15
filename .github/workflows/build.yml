@@ -81,7 +81,7 @@ jobs:
           sudo apt install docker.io
           docker --version # just to test installation
           sudo docker container ls -aq --filter name=cicdeptgitdic1 |xargs --no-run-if-empty sudo docker stop |xargs --no-run-if-empty sudo  docker container rm 
-          sudo docker run --name cicdeptgitdic1  -d -p 80:8080 <<your_docker_hub_user_name>>/todos:latest
+          sudo docker run --name cicdeptgitdic1  -d -p 80:8080 <<hamsak>>/todos:latest
    
    
     - name: Wait for deploy to finish
